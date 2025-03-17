@@ -44,8 +44,8 @@ class HeadHunterAPI(Vacancy):
         response = requests.get(url, params = params)
         return response
 
-hh_api = HeadHunterAPI()
-vacancies = hh_api.get_vacancies("менеджер")
-print(len(hh_api.vacancies))
-print(hh_api.vacancies)
+# hh_api = HeadHunterAPI()
+# vacancies = hh_api.get_vacancies("менеджер")
+# print(len(hh_api.vacancies))
+# print(hh_api.vacancies)
 

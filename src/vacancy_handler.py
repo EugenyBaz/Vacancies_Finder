@@ -53,17 +53,3 @@ class VacancyHandler:
             print(f"Произошла ошибка при сравнении зарплат: {e}. Пропускаем сравнение.")
             return None
 
-#
-# hh_api = HeadHunterAPI()
-# vacancies = hh_api.get_vacancies("Python developer")
-# processed_vacancies = []
-# for vacancy in vacancies:
-#     processed_vacancies.append(
-#         VacancyHandler(
-#             name=vacancy["name"],
-#             vacancies_url=vacancy["alternate_url"],
-#             salary=vacancy.get("salary"),
-#             requirement=vacancy.get('snippet').get("requirement")))
-# # Теперь у нас есть список обработанных вакансий
-# vacancy_list = [(vacancy.name, vacancy.vacancies_url, vacancy. salary, vacancy.requirement) for vacancy in processed_vacancies]
-# print(vacancy_list)
