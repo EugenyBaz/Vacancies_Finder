@@ -43,7 +43,7 @@ class HeadHunterAPI(Vacancy):
     def _connect_to_api(self, url, params):
         response = requests.get(url, params = params)
         return response
-
+#
 # hh_api = HeadHunterAPI()
 # vacancies = hh_api.get_vacancies("менеджер")
 # print(len(hh_api.vacancies))

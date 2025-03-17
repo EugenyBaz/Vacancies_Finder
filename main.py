@@ -16,9 +16,9 @@ def user_interaction():
 
     ranged_vacancies = get_vacancies_by_salary(filtered_vacancies, salary_range)
 
-    sorted_vacancies = sort_vacancies(ranged_vacancies)
-    top_vacancies = get_top_vacancies(sorted_vacancies, top_n)
-    print_vacancies(top_vacancies)
+    # sorted_vacancies = sort_vacancies(ranged_vacancies)
+    # top_vacancies = get_top_vacancies(sorted_vacancies, top_n)
+    # print_vacancies(top_vacancies)
 
 
 if __name__ == "__main__":
