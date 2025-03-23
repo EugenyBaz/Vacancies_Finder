@@ -1,5 +1,11 @@
 from abc import ABC, abstractmethod
 import json
+import os
+
+current_dir = os.path.dirname((os.path.abspath(__file__)))
+project_root = os.path.abspath(os.path.join(current_dir, ".."))
+data_file_path = os.path.join(project_root, "data", "vacancy_data.json" )
+
 
 class SAVER(ABC):
 
@@ -17,9 +23,9 @@ class SAVER(ABC):
 
 class JSONSaver(SAVER):
 
-    def __init__(self, filename='default.json'):
+    def __init__(self, filename = data_file_path):
         self.__filename = filename
-        self.data = {}
+        self.data = []
         self.load = ()
 
     def load_data(self):
@@ -34,27 +40,52 @@ class JSONSaver(SAVER):
             with open(self.__filename, 'r', encoding='utf-8') as file:
                 existing_data = json.load(file)
         except FileNotFoundError:
-            existing_data = {}
-        existing_data.update(self.data)
+            with open(self.__filename, 'w', encoding='utf-8') as file:
+                json.dump(self.data, file, indent=4, ensure_ascii= False)
+                return
+        for v in existing_data:
+            for i in self.data:
+                v.update(i)
+
         with open(self.__filename, 'w', encoding='utf-8') as file:
-            json.dump(existing_data, file, indent=4)
+            json.dump(existing_data, file, indent=4, ensure_ascii= False)
 
 
     def add_vacancy(self, vacancy):
         vacancy_id = vacancy.get('id')
-        if vacancy_id not in self.data:
-            self.data[vacancy_id] = vacancy
-            self.save_data()
+        if vacancy_id not in [v['id'] for v in self.data]:
+            self.data.append(vacancy)
 
         else:
             print(f"Вакансия с id={vacancy_id} уже существует.")
 
-    def get_vacancy_factor(self, factor):
+    def get_vacancy_currency(self, factor, vacancies = None):
         results = []
-        for vacancy in self.data.values():
-            if all(f in vacancy.items() for f in factor.items()):
+
+        if vacancies is None:
+            vacancies = self.data
+        for vacancy in vacancies:
+            if vacancy.get('salary') and vacancy['salary'].get('currency') == factor:
                 results.append(vacancy)
+
         return results
+
+    def get_vacancy_factor(self, factor_user, vacancies=None):
+        results = []
+
+        if vacancies is None:
+            vacancies = self.data
+
+        for vacancy in vacancies:
+            if factor_user is not None:
+                for field in ["name", "area", "snippet", "requirement", "responsibility"]:
+                    if field in vacancy and factor_user in str(vacancy[field]):
+                        results.append(vacancy)
+
+                        break
+
+        return results
+
 
     def delete_vacancy(self, vacancy_id):
         if vacancy_id in self.data:
