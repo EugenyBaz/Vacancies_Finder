@@ -1,4 +1,4 @@
-# from src.headhunter_api import HeadHunterAPI
+from src.headhunter_api import HeadHunterAPI
 
 class VacancyHandler:
 
