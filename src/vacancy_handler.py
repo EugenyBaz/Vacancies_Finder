@@ -51,5 +51,5 @@ class VacancyHandler:
             return my_salary > other_salary
         except ValueError as e:
             print(f"Произошла ошибка при сравнении зарплат: {e}. Пропускаем сравнение.")
-            return None
+            return False
 
