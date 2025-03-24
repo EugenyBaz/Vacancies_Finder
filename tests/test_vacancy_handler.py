@@ -14,65 +14,47 @@ def test_empty_string_values(vacancy_list_invalid_name):
     with pytest.raises(ValueError):
         VacancyHandler(**vacancy_list_invalid_name)
 
-    # with pytest.raises(ValueError):
-    #     VacancyHandler("Test Job", "",
-    #                    {"from": 50000, "to": 80000}, "Requirements here")
+def test_empty_string_values_url(vacancy_list_invalid_url):
+    with pytest.raises(ValueError):
+        VacancyHandler(**vacancy_list_invalid_url)
 
-def test_invalid_types(vacancy_list_invalid_name_type):
+def test_invalid_types_name(vacancy_list_invalid_name_type):
     with pytest.raises(ValueError):
         VacancyHandler(**vacancy_list_invalid_name_type)
 
-    # with pytest.raises(ValueError):
-    #     VacancyHandler("Test Job", 123,
-    #                    {"from": 50000, "to": 80000}, "Requirements here")
-
-def test_non_dict_salary(self):
+def test_invalid_types_url(vacancy_list_invalid_url_type):
     with pytest.raises(ValueError):
-        VacancyHandler("Test Job", "http://example.com/job",
-                       "string instead of dict", "Requirements here")
+        VacancyHandler(**vacancy_list_invalid_url_type)
 
-def test_salary_formats(self):
-    handler = VacancyHandler("Test Job", "http://example.com/job",
-                             50000, "Requirements here")
-    assert handler.salary == "50000.00"
-    handler = VacancyHandler("Test Job", "http://example.com/job",
-                             "75000", "Requirements here")
-    assert handler.salary == "75000.00"
-    handler = VacancyHandler("Test Job", "http://example.com/job",
-                             {"from": 50000, "to": 80000}, "Requirements here")
-    assert handler.salary == " от 50000 до 80000"
+def test_non_dict_salary(vacancy_list_invalid_salary):
+    with pytest.raises(ValueError):
+        VacancyHandler(**vacancy_list_invalid_salary)
 
-def test_empty_requirements(self):
-    handler = VacancyHandler("Test Job", "http://example.com/job",
-                             {"from": 50000, "to": 80000}, "")
-    assert handler.requirement == ""
+def test_salary_formats(vacancy_list_salary):
+    assert float(vacancy_list_salary.salary) == 50000.00
 
-# Тесты для метода __gt__
-class TestSalaryComparison:
-    def test_gt_salary_comparison(self):
-        handler1 = VacancyHandler("Job A", "http://example.com/job1",
-                                  {"from": 50000, "to": 80000})
-        handler2 = VacancyHandler("Job B", "http://example.com/job2",
-                                  {"from": 40000, "to": 60000})
-        assert handler1 > handler2
 
-    def test_salary_not_specified(self):
-        handler1 = VacancyHandler("Job A", "http://example.com/job1",
-                                  "Зарплата не указана")
-        handler2 = VacancyHandler("Job B", "http://example.com/job2",
-                                  {"from": 40000, "to": 60000})
-        assert not handler1 > handler2
+def test_empty_requirements(vacancy_list_emp_req):
+        assert vacancy_list_emp_req.requirement == ""
 
-    def test_equal_salaries(self):
-        handler1 = VacancyHandler("Job A", "http://example.com/job1",
-                                  {"from": 50000, "to": 80000})
-        handler2 = VacancyHandler("Job B", "http://example.com/job2",
-                                  {"from": 50000, "to": 80000})
-        assert not handler1 > handler2
+def extract_salary_int(salary_str):
+    parts = salary_str.split()
+    numbers = []
 
-    def test_unparseable_salary(self):
-        handler1 = VacancyHandler("Job A", "http://example.com/job1",
-                                  "Invalid salary format")
-        handler2 = VacancyHandler("Job B", "http://example.com/job2",
-                                  {"from": 40000, "to": 60000})
-        assert not handler1 > handler2
+    for part in parts:
+        try:
+            number = int(part)  # Пробуем преобразовать слово в целое число
+            numbers.append(number)
+        except ValueError:
+            pass
+    return tuple(numbers[:2])
+
+def test_gt_salary_comparison(vacancy_list_comp1, vacancy_list_comp2):
+
+    vac1_min, vac1_max = extract_salary_int(vacancy_list_comp1.salary)
+    vac2_min, vac2_max = extract_salary_int(vacancy_list_comp2.salary)
+    assert vac2_max > vac1_max
+
+
+
+

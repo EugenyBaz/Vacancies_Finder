@@ -10,7 +10,7 @@ def mock_requests():
     """
     Фикстура для подмены модуля requests
     """
-    with patch('headhunter_api.requests', autospec=True) as mock:
+    with patch('src.headhunter_api.requests', autospec=True) as mock:
         yield mock
 
 
