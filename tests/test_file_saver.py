@@ -1,5 +1,5 @@
 import pytest
-import os
+
 from src.file_saver import JSONSaver
 
 # Фиктивная вакансия
@@ -23,13 +23,16 @@ TEST_DATA_FILE_PATH = "temp_test_data.json"
 #     """Создание экземпляра JSONSaver с временным файлом"""
 #     return JSONSaver(filename=str(temp_data_file))
 
+
 @pytest.fixture
 def saver(tmp_path):
     """Создание экземпляра JSONSaver с временным файлом"""
     temp_file = tmp_path / "temp_test_data.json"
     return JSONSaver(filename=str(temp_file))
 
+
 # ТЕСТЫ
+
 
 def test_add_vacancy(saver):
     """Тестирование добавления вакансии"""
@@ -39,6 +42,7 @@ def test_add_vacancy(saver):
     # Загружаем сохранённые данные
     saver.load_data()
     assert VACANCY_1 in saver.data
+
 
 def test_delete_vacancy(saver):
     """Тестирование удаления вакансии"""
@@ -55,6 +59,7 @@ def test_load_nonexistent_file(saver):
     saver.load_data()
     assert saver.data == []
 
+
 def test_duplicate_vacancy(saver):
     """Тестирование попытки добавления дублирующей вакансии"""
     saver.add_vacancy(VACANCY_1)
@@ -63,6 +68,7 @@ def test_duplicate_vacancy(saver):
     # Проверяем, что добавлена только одна вакансия
     saver.load_data()
     assert len(saver.data) == 1
+
 
 def test_add_duplicate_vacancy(saver):
     """Тестирование добавления дублирующей вакансии"""
@@ -73,6 +79,7 @@ def test_add_duplicate_vacancy(saver):
     saver.load_data()
     assert len(saver.data) == 1
 
+
 def test_delete_nonexistent_vacancy(saver):
     """Тестирование удаления несуществующей вакансии"""
     saver.delete_vacancy(999)  # несуществующий id
@@ -80,6 +87,7 @@ def test_delete_nonexistent_vacancy(saver):
     # Проверяем, что ничего не было удалено
     saver.load_data()
     assert saver.data == []
+
 
 def test_save_existing_data(saver):
     """Тестирование сохранения существующих данных"""
@@ -89,6 +97,7 @@ def test_save_existing_data(saver):
     # Проверяем, что данные были сохранены
     saver.load_data()
     assert VACANCY_1 in saver.data
+
 
 def test_add_vacancy_with_empty_salary(saver):
     """Тестирование добавления вакансии с пустой зарплатой"""
@@ -100,6 +109,7 @@ def test_add_vacancy_with_empty_salary(saver):
     saver.load_data()
     assert vacancy_with_empty_salary in saver.data
 
+
 def test_get_vacancy_by_area(saver):
     """Тестирование поиска вакансии по области"""
     saver.add_vacancy({"id": 3, "name": "Вакансия в Санкт-Петербурге", "area": "Санкт-Петербург"})
@@ -107,4 +117,3 @@ def test_get_vacancy_by_area(saver):
     # Поиск вакансии по области "Санкт-Петербург"
     result = saver.get_vacancy_factor("Санкт-Петербург")
     assert {"id": 3, "name": "Вакансия в Санкт-Петербурге", "area": "Санкт-Петербург"} in result
-

@@ -1,10 +1,8 @@
-from src.headhunter_api import HeadHunterAPI
-
 class VacancyHandler:
 
-    __slots__ = ("name", "vacancies_url", "salary", "requirement" )
+    __slots__ = ("name", "vacancies_url", "salary", "requirement")
 
-    def __init__(self, name, vacancies_url, salary = None, requirement = None):
+    def __init__(self, name, vacancies_url, salary=None, requirement=None):
         self.name = self._validate_name(name)
         self.vacancies_url = self._validate_vacancies_url(vacancies_url)
         self.salary = self._validate_salary(salary)
@@ -20,7 +18,6 @@ class VacancyHandler:
             raise ValueError("Ссылка должна быть не пустой строкой.")
         return vacancies_url.strip()
 
-
     def _validate_salary(self, salary):
         if salary is None:
             return "Зарплата не указана"
@@ -31,10 +28,9 @@ class VacancyHandler:
         elif isinstance(salary, dict):
             salary_value_from = salary.get("from")
             salary_value_to = salary.get("to")
-            return f' от {salary_value_from} до {salary_value_to}'
+            return f" от {salary_value_from} до {salary_value_to}"
         else:
             raise ValueError("Заработная плата должна быть числом или пустой строкой.")
-
 
     def _validate_requirement(self, requirement):
         if not isinstance(requirement, str):
@@ -52,4 +48,3 @@ class VacancyHandler:
         except ValueError as e:
             print(f"Произошла ошибка при сравнении зарплат: {e}. Пропускаем сравнение.")
             return False
-

@@ -1,10 +1,10 @@
-from abc import ABC, abstractmethod
 import json
 import os
+from abc import ABC, abstractmethod
 
 current_dir = os.path.dirname((os.path.abspath(__file__)))
 project_root = os.path.abspath(os.path.join(current_dir, ".."))
-data_file_path = os.path.join(project_root, "data", "vacancy_data.json" )
+data_file_path = os.path.join(project_root, "data", "vacancy_data.json")
 
 
 class SAVER(ABC):
@@ -21,9 +21,10 @@ class SAVER(ABC):
     def delete_vacancy(self, vacancy_id):
         pass
 
+
 class JSONSaver(SAVER):
 
-    def __init__(self, filename = data_file_path):
+    def __init__(self, filename=data_file_path):
         self.__filename = filename
         self.data = []
         self.load = ()
@@ -37,10 +38,10 @@ class JSONSaver(SAVER):
 
     def save_data(self):
         try:
-            with open(self.__filename, 'r', encoding='utf-8') as file:
+            with open(self.__filename, "r", encoding="utf-8") as file:
                 existing_data = json.load(file)
         except FileNotFoundError:
-            with open(self.__filename, 'w', encoding='utf-8') as file:
+            with open(self.__filename, "w", encoding="utf-8") as file:
                 json.dump(self.data, file, indent=4, ensure_ascii=False)
                 return
 
@@ -48,7 +49,7 @@ class JSONSaver(SAVER):
         for vacancy in self.data:
             found = False
             for existing_vacancy in existing_data:
-                if existing_vacancy['id'] == vacancy['id']:
+                if existing_vacancy["id"] == vacancy["id"]:
                     existing_vacancy.update(vacancy)
                     found = True
                     break
@@ -56,25 +57,24 @@ class JSONSaver(SAVER):
                 existing_data.append(vacancy)
 
         # Сохраняем обновленные данные
-        with open(self.__filename, 'w', encoding='utf-8') as file:
+        with open(self.__filename, "w", encoding="utf-8") as file:
             json.dump(existing_data, file, indent=4, ensure_ascii=False)
 
-
     def add_vacancy(self, vacancy):
-        vacancy_id = vacancy.get('id')
-        if vacancy_id not in [v['id'] for v in self.data]:
+        vacancy_id = vacancy.get("id")
+        if vacancy_id not in [v["id"] for v in self.data]:
             self.data.append(vacancy)
 
         else:
             print(f"Вакансия с id={vacancy_id} уже существует.")
 
-    def get_vacancy_currency(self, factor, vacancies = None):
+    def get_vacancy_currency(self, factor, vacancies=None):
         results = []
 
         if vacancies is None:
             vacancies = self.data
         for vacancy in vacancies:
-            if vacancy.get('salary') and vacancy['salary'].get('currency') == factor:
+            if vacancy.get("salary") and vacancy["salary"].get("currency") == factor:
                 results.append(vacancy)
 
         return results
@@ -95,10 +95,9 @@ class JSONSaver(SAVER):
 
         return results
 
-
     def delete_vacancy(self, vacancy_id):
 
-        vacancy_to_delete = next((vacancy for vacancy in self.data if vacancy['id'] == vacancy_id), None)
+        vacancy_to_delete = next((vacancy for vacancy in self.data if vacancy["id"] == vacancy_id), None)
 
         if vacancy_to_delete:
             # Удаляем вакансию из списка
@@ -106,5 +105,3 @@ class JSONSaver(SAVER):
             self.save_data()
         else:
             print(f"Вакансия с id={vacancy_id} не найдена.")
-
-
