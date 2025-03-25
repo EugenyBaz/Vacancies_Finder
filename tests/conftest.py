@@ -55,3 +55,4 @@ def vacancy_list_comp1():
 def vacancy_list_comp2():
   return VacancyHandler("Test Job", "http://example.com/job",
                                  {"from": 100000, "to": 180000}, "Requirements here")
+
