@@ -41,14 +41,23 @@ class JSONSaver(SAVER):
                 existing_data = json.load(file)
         except FileNotFoundError:
             with open(self.__filename, 'w', encoding='utf-8') as file:
-                json.dump(self.data, file, indent=4, ensure_ascii= False)
+                json.dump(self.data, file, indent=4, ensure_ascii=False)
                 return
-        for v in existing_data:
-            for i in self.data:
-                v.update(i)
 
+        # Обновляем существующие данные
+        for vacancy in self.data:
+            found = False
+            for existing_vacancy in existing_data:
+                if existing_vacancy['id'] == vacancy['id']:
+                    existing_vacancy.update(vacancy)
+                    found = True
+                    break
+            if not found:
+                existing_data.append(vacancy)
+
+        # Сохраняем обновленные данные
         with open(self.__filename, 'w', encoding='utf-8') as file:
-            json.dump(existing_data, file, indent=4, ensure_ascii= False)
+            json.dump(existing_data, file, indent=4, ensure_ascii=False)
 
 
     def add_vacancy(self, vacancy):
@@ -88,8 +97,12 @@ class JSONSaver(SAVER):
 
 
     def delete_vacancy(self, vacancy_id):
-        if vacancy_id in self.data:
-            del self.data[vacancy_id]
+
+        vacancy_to_delete = next((vacancy for vacancy in self.data if vacancy['id'] == vacancy_id), None)
+
+        if vacancy_to_delete:
+            # Удаляем вакансию из списка
+            self.data.remove(vacancy_to_delete)
             self.save_data()
         else:
             print(f"Вакансия с id={vacancy_id} не найдена.")
