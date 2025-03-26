@@ -11,7 +11,7 @@ class VacancyHandler:
         self.requirement = self._validate_requirement(requirement or "")
 
     def _validate_name(self, name):
-        """Метод валидации name """
+        """Метод валидации name"""
         if not isinstance(name, str) or len(name.strip()) == 0:
             raise ValueError("Название вакансии должно быть непустым строковым значением.")
         return name.strip()

@@ -9,9 +9,8 @@ project_root = os.path.abspath(os.path.join(current_dir, ".."))
 data_file_path = os.path.join(project_root, "data", "vacancy_data.json")
 
 
-
 def user_interaction(search_query, min_salary, user_currency, factor_user, top_n):
-    """ Определение функции user_interaction"""
+    """Определение функции user_interaction"""
     filtered_vacancies = []
     total_vacancy = []
 
