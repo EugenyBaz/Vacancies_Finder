@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 import requests
 
 
-class Vacancy(ABC):
+class AbstractApi(ABC):
     """Абстрактный класс"""
 
     @abstractmethod
@@ -19,15 +19,17 @@ class Vacancy(ABC):
         pass
 
 
-class HeadHunterAPI(Vacancy):
+class HeadHunterAPI(AbstractApi):
     """Класс работы с API"""
 
     def __init__(self):
+        """Инициализация атрибутов"""
         self.__url = "https://api.hh.ru/vacancies"
         self.__params = {"text": "", "page": 0, "per_page": 100}
         self.__vacancies = []
 
     def get_vacancies(self, keyword):
+        """Метод получения вакансии"""
         self.__params["text"] = keyword
         while self.__params.get("page") != 1:
             response = self._connect_to_api(self.__url, self.__params)
@@ -43,6 +45,7 @@ class HeadHunterAPI(Vacancy):
         return self.__vacancies
 
     def _connect_to_api(self, url, params):
+        """Метод для выполнения запроса"""
         response = requests.get(url, params=params)
         return response
 

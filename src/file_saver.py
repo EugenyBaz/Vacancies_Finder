@@ -8,6 +8,7 @@ data_file_path = os.path.join(project_root, "data", "vacancy_data.json")
 
 
 class SAVER(ABC):
+    """Определяем абстрактный класс"""
 
     @abstractmethod
     def add_vacancy(self, vacancy):
@@ -23,13 +24,16 @@ class SAVER(ABC):
 
 
 class JSONSaver(SAVER):
+    """Определяем класс для работы с файлами"""
 
     def __init__(self, filename=data_file_path):
+        """Метод инициализации атрибутов класса"""
         self.__filename = filename
         self.data = []
         self.load = ()
 
     def load_data(self):
+        """Метод чтения и загрузки файла в data"""
         try:
             with open(self.__filename, "r", encoding="utf-8") as file:
                 self.data = json.load(file)
@@ -61,6 +65,7 @@ class JSONSaver(SAVER):
             json.dump(existing_data, file, indent=4, ensure_ascii=False)
 
     def add_vacancy(self, vacancy):
+        """Метод добавления вакансии"""
         vacancy_id = vacancy.get("id")
         if vacancy_id not in [v["id"] for v in self.data]:
             self.data.append(vacancy)
@@ -69,6 +74,7 @@ class JSONSaver(SAVER):
             print(f"Вакансия с id={vacancy_id} уже существует.")
 
     def get_vacancy_currency(self, factor, vacancies=None):
+        """Метод определения необходимой валюты"""
         results = []
 
         if vacancies is None:
@@ -80,6 +86,7 @@ class JSONSaver(SAVER):
         return results
 
     def get_vacancy_factor(self, factor_user, vacancies=None):
+        """Поиск вакансии по параметру"""
         results = []
 
         if vacancies is None:
@@ -96,6 +103,7 @@ class JSONSaver(SAVER):
         return results
 
     def delete_vacancy(self, vacancy_id):
+        """Удаление вакансии"""
 
         vacancy_to_delete = next((vacancy for vacancy in self.data if vacancy["id"] == vacancy_id), None)
 
