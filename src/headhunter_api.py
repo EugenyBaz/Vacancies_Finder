@@ -31,6 +31,7 @@ class HeadHunterAPI(AbstractApi):
     def get_vacancies(self, keyword):
         """Метод получения вакансии"""
         self.__params["text"] = keyword
+        # while self.__params.get("page") != 1:
         while self.__params.get("page") != 1:
             response = self._connect_to_api(self.__url, self.__params)
             if response.status_code != 200:
